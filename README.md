@@ -1,13 +1,11 @@
-G1. Route model binding needs two things to be true. Name both, and say what happens when only one of them is.
+H1. The top of your error page named a file inside vendor. Say why that was not where your mistake was, and where the page showed you it actually was.
 
-Route model binding needs two things: the route parameter name must match the controller's model variable, and the model must exist in the database with the correct ID. If only one condition is met, Laravel may fail to resolve the model and return a 404 error.
+The vendor file belongs to Laravel, so it was not where my mistake was. The actual mistake was in my MovieController.php, where I accidentally used withh() instead of with().
 
+H2. You wrote one Log::info line with a context array. Name something it will tell you next month that the error page could not.
 
-G2. Your Delete link opened the detail page instead of deleting anything. Explain why.
+My Log::info line can tell me which movie was saved by showing its ID. I can use this information to check the records created in my system even after the activity.
 
-My Delete link opened the detail page because it was using a normal link (<a href>) that sends a GET request instead of a DELETE request. Deleting a record requires a form with method="POST", @csrf, and @method('DELETE') connected to the destroy route.
+H3. Your guard answers with 403 instead of redirecting back with a message. Say when each of the two is the better answer.
 
-
-G3. old() takes a second argument on your edit form. What would break if you left it out, and what would break if you used only it?
-
-The second argument in old() provides the movie's original value when the edit page first loads. If I leave it out, the form fields will be empty when I open the edit page, and if I use only the original value, the values I typed will disappear after validation fails.
+A 403 is better when a user is not allowed to perform an action, such as deleting the last movie in a genre. Redirecting with a message is better when an action is allowed but the user needs feedback about the result.
