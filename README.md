@@ -1,11 +1,13 @@
-H1. The top of your error page named a file inside vendor. Say why that was not where your mistake was, and where the page showed you it actually was.
+#LA13
 
-The vendor file belongs to Laravel, so it was not where my mistake was. The actual mistake was in my MovieController.php, where I accidentally used withh() instead of with().
+J1. Your HomeController is not a resource controller. Name two things an index() on a resource controller does that yours does not have to.
 
-H2. You wrote one Log::info line with a context array. Name something it will tell you next month that the error page could not.
+My HomeController only handles the home page and displays the information needed. A resource controller also has methods for creating, storing, editing, updating, and deleting records. My HomeController does not need all those methods.
 
-My Log::info line can tell me which movie was saved by showing its ID. I can use this information to check the records created in my system even after the activity.
+J2. Your pagination links lost the search term until you added one method. Say what those links contained before, and what the controller therefore received.
 
-H3. Your guard answers with 403 instead of redirecting back with a message. Say when each of the two is the better answer.
+Before adding withQueryString(), the pagination links only contained the page number and lost the search term. The controller received the page number but did not receive the previous search value.
 
-A 403 is better when a user is not allowed to perform an action, such as deleting the last movie in a genre. Redirecting with a message is better when an action is allowed but the user needs feedback about the result.
+J3. A misspelled sort value does not break your page. Explain why that is worse than an error, and what your allowed list does about it.
+
+A misspelled sort value is worse than an error because the page still loads but the movies may not be sorted correctly. The allowed list checks the sort value and uses title as the default if the value is invalid.

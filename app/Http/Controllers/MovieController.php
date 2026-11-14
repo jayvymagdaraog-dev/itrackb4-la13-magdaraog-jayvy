@@ -8,27 +8,64 @@ use App\Models\Genre;
 use Illuminate\Support\Facades\Log;
 class MovieController extends Controller
 {
-   public function index(Request $request)
+   
+
+public function index(Request $request)
 {
+    $query = Movie::with('genre');
+
+    // Search by movie title
+    $search = $request->query('search');
+
+    if ($search !== null && $search !== '') {
+        $query->where('title', 'like', "%{$search}%");
+    }
+
+    // Filter by genre
     $genreId = $request->query('genre_id');
+
+    if ($genreId !== null && $genreId !== '') {
+        $query->where('genre_id', $genreId);
+    }
+
+    // Filter by year
     $year = $request->query('year');
+
+    if ($year !== null && $year !== '') {
+        $query->where('year', $year);
+    }
+
+    // Filter by boolean column
+    $isShowing = $request->query('is_showing');
+
+    if ($isShowing !== null && $isShowing !== '') {
+        $query->where('is_showing', $isShowing);
+    }
+
+    // Sorting with an allowed list
+    $sort = $request->query('sort', 'title');
+
+    if (! in_array($sort, ['title', 'year'])) {
+        $sort = 'title';
+    }
+
+    // Pagination while keeping search and filters
+    $movies = $query->orderBy($sort)->paginate(7)->withQueryString();
 
     $genres = Genre::all();
 
-    $query = Movie::with('genre');
-
-    if ($genreId) {
-        $query = $query->where('genre_id', $genreId);
-    }
-
-    if ($year) {
-        $query = $query->where('year', $year);
-    }
-
-    $movies = $query->get();
-
-    return view('movies.index', compact('movies', 'genres', 'genreId', 'year'));
+    return view('movies.index', compact(
+        'movies',
+        'genres',
+        'genreId',
+        'year',
+        'search',
+        'isShowing',
+        'sort'
+    ));
 }
+
+
 
     /**
      * Show the form for creating a new resource.
